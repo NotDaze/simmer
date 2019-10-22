@@ -6,24 +6,95 @@ strokeCap(ROUND);
 
 var Camera = new Vector3(0, 0, 800);
 
-var points = [];
+/*var points = [];
 var triangles = [];
 
-for(var i = 0; i < 31; i++) {
+for(var i = 0; i < 14; i++) {
   points.push(new Vector3( 100,  100, -150 + i * 10));
   points.push(new Vector3( 100, -100, -150 + i * 10));
   points.push(new Vector3(-100,    0, -150 + i * 10));
   
   triangles.push([i * 3, i * 3 + 1, i * 3 + 2, { r: 255 * i/30, g: 0, b: 255 - 255 * i/30, a:255 }]);
+}*/
+
+/*var points = [];
+var triangles = [];
+var a = new Vector3(   0,   50,  -50);
+var b = new Vector3(   0,   50,   50);
+var c = new Vector3(   0,  100,  -50);
+var d = new Vector3(   0,  100,   50);
+
+for(var i = 0; i < 36; i++) {
+  points.push(a.get());
+  points.push(b.get());
+  points.push(c.get());
+  points.push(d.get());
+  a.rotateZ(3.14159 * 2/36);
+  b.rotateZ(3.14159 * 2/36);
+  c.rotateZ(3.14159 * 2/36);
+  d.rotateZ(3.14159 * 2/36);
 }
+for(var i = 0; i < 36; i++) {
+  var segmentColor = { r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255, a: 255};
+  triangles.push([(i * 4 + 0) % 144, (i * 4 + 2) % 144, (i * 4 + 4) % 144, segmentColor]);
+  triangles.push([(i * 4 + 2) % 144, (i * 4 + 4) % 144, (i * 4 + 6) % 144, segmentColor]);
+  triangles.push([(i * 4 + 2) % 144, (i * 4 + 3) % 144, (i * 4 + 7) % 144, segmentColor]);
+  triangles.push([(i * 4 + 3) % 144, (i * 4 + 7) % 144, (i * 4 + 6) % 144, segmentColor]);
+  triangles.push([(i * 4 + 1) % 144, (i * 4 + 3) % 144, (i * 4 + 5) % 144, segmentColor]);
+  triangles.push([(i * 4 + 3) % 144, (i * 4 + 5) % 144, (i * 4 + 7) % 144, segmentColor]);
+  triangles.push([(i * 4 + 0) % 144, (i * 4 + 1) % 144, (i * 4 + 4) % 144, segmentColor]);
+  triangles.push([(i * 4 + 1) % 144, (i * 4 + 4) % 144, (i * 4 + 5) % 144, segmentColor]);
+}*/
+
+var points = [];
+var triangles = [];
+var a = new Vector3(   0,   50,  -50);
+var b = new Vector3(   0,   50,   50);
+var c = new Vector3(   0,  100,  -50);
+var d = new Vector3(   0,  100,   50);
+
+for(var i = 0; i < 36; i++) {
+  points.push(a.get());
+  points.push(b.get());
+  points.push(c.get());
+  points.push(d.get());
+  a.rotateZ(3.14159 * 2/36);
+  b.rotateZ(3.14159 * 2/36);
+  c.rotateZ(3.14159 * 2/36);
+  d.rotateZ(3.14159 * 2/36);
+}
+
+for(var i = 0; i < 36; i++) {
+  var segmentColor = { r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255, a: 255};
+  triangles.push([(i * 4 + 2) % 144, (i * 4 + 3) % 144, (i * 4 + 6) % 144, segmentColor]);
+  triangles.push([(i * 4 + 3) % 144, (i * 4 + 6) % 144, (i * 4 + 7) % 144, segmentColor]);
+}
+
+/*var points = [
+  new Vector3( 100,  100,    5),
+  new Vector3( 100, -100,    5),
+  new Vector3(-100,    0,   15),
+  new Vector3( 100,  100,    0),
+  new Vector3( 100, -100,    0),
+  new Vector3(-100,    0,    0),
+  new Vector3( 100,  100,   -5),
+  new Vector3( 100, -100,   -5),
+  new Vector3(-100,    0,  -15),
+];
+var triangles = [
+  [0, 1, 2, 50],
+  [3, 4, 5, 100],
+  [6, 7, 8, 150],
+];*/
 
 /*var points = [
   new Vector3( 100,  100,    0),
   new Vector3( 100, -100,    0),
   new Vector3(-100,    0,    0),
-  new Vector3(   0,    0,    0),
+  new Vector3(   0,   50,   50),
   new Vector3( 100,    0,  100),
   new Vector3(-100,    0,  100),
+  new Vector3(   0, -100,  -50),
   new Vector3( 100,    0, -100),
   new Vector3(-100,    0, -100),
 ];
@@ -32,7 +103,7 @@ var triangles = [
 
   [0, 1, 2, 0],
   [3, 4, 5, 150],
-  //[3, 6, 7, 150]
+  [6, 7, 8, 150]
 ];*/
 
 var randomizeArray = function(a) {
@@ -41,7 +112,6 @@ var randomizeArray = function(a) {
   
   while(temp.length > 0) {
     var taken = Math.floor(Math.random() * temp.length);
-    console.log(taken);
     out.push(temp.splice(taken, 1)[0]);
   }
   
@@ -152,12 +222,37 @@ function compareTriangles(one, two) {
     otherCross = oneCross;
   }
   
+  if(referenceCross.z < 0) {
+    referenceCross.mult(-1);
+  }
+  
   let referencePoint = points[reference[0]];
-  let otherPoint = points[inAnotB(other, reference)[0]];
+  let minDist = Vector3.dist(points[reference[0]], Camera);
+  for(var i = 1; i < 3; i++) {
+    let dist = Vector3.dist(points[reference[i]], Camera);
+    if(dist < minDist) {
+      minDist = dist;
+      referencePoint = points[reference[i]];
+    }
+  }
+  
+  let otherPoints = inAnotB([other[0], other[1], other[2]], [reference[0], reference[1], reference[2]]);
+  let otherPoint = points[otherPoints[0]];
+  for(var i = 1; i < otherPoints.length; i++) {
+    if(points[otherPoints[i]].z > otherPoint.z) {
+      otherPoint = points[otherPoints[i]];
+    }
+  }
   
   let dCamera = D(Camera, referenceCross);
   let dReference = D(referencePoint, referenceCross);
   let dOther = D(otherPoint, referenceCross);
+  
+  /*stroke(0);
+  strokeWeight(10);
+  point(referencePoint);
+  stroke(255, 0, 0);
+  point(otherPoint);
   
   /*var twoA = points[inAnotB(two, one)[0]];
   
@@ -184,14 +279,14 @@ function sortTriangles(set) {
   }
   if(set.length === 2) {
     if(compareTriangles(set[0], set[1]) === 1) {
-      return set;
+      return [set[0], set[1]];
     }
     else {
       return [set[1], set[0]];
     }
   }
-  var ahead = [];
-  var behind = [];
+  let ahead = [];
+  let behind = [];
   for(var i = 1; i < set.length; i++) {
     if(compareTriangles(set[0], set[i]) === 0) {
       behind.push(set[i]);
@@ -209,12 +304,10 @@ function draw() {
   background(255);
   pushMatrix();
   translate(Camera.x + width/2, Camera.y + height/2);
-  noStroke();
-  
+  strokeWeight(0.5);
   for(var i = 0; i < ordered.length; i++) {
     fill(ordered[i][3]);
-    stroke(0);
-    strokeWeight(1);
+    stroke(ordered[i][3]);
     beginShape();
     for(var j = 0; j < ordered[i].length - 1; j++) {
       var zDif = Camera.z - points[ordered[i][j]].z;
